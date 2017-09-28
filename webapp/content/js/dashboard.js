@@ -99,7 +99,8 @@ var GraphRecord = new Ext.data.Record.create([
   {name: 'params', type: 'auto'},
   {name: 'url'},
   {name: 'width', type: 'auto'},
-  {name: 'height', type: 'auto'}
+  {name: 'height', type: 'auto'},
+  {name: 'loading'},
 ]);
 
 var graphStore;
@@ -379,7 +380,7 @@ function initDashboard () {
     '<tpl for=".">',
       '<div class="graph-container">',
         '<div class="graph-overlay">',
-          '<img class="graph-img" src="{url}" width="{width}" height="{height}">',
+          '<img class="graph-img{loading}" src="{url}" width="{width}" height="{height}">',
           '<div class="overlay-close-button" onclick="javascript: graphStore.removeAt(\'{index}\'); updateGraphRecords(); justClosedGraph = true;">X</div>',
         '</div>',
       '</div>',
@@ -1070,7 +1071,16 @@ function updateGraphRecords() {
     if (!params.uniq === undefined) {
         delete params["uniq"];
     }
-    item.set('url', document.body.dataset.baseUrl + 'render?' + Ext.urlEncode(params));
+
+    //Preload the image and set it into the UI once it is available.
+    item.set('loading','-loading');
+    var img = new Image();
+    img.onload = function() {
+      item.set('url',img.src);
+      item.set('loading','');
+    };
+    img.src = document.body.dataset.baseUrl + 'render?' + Ext.urlEncode(params);
+
     item.set('width', GraphSize.width);
     item.set('height', GraphSize.height);
     item.set('index', index);
@@ -2643,6 +2653,24 @@ function applyState(state) {
   TimeRange.startTime = timeConfig.startTime;
   TimeRange.endDate = new Date(timeConfig.endDate);
   TimeRange.endTime = timeConfig.endTime;
+
+  if (queryString.from && queryString.until) {
+    // The URL contains a "from" and "until" parameters (format "YYYY-MM-DDThh:mm:ss") => use the timestamps as default absolute range of the dashboard
+    var from = new Date(queryString.from);
+    var until = new Date(queryString.until);
+
+    TimeRange.startDate = from;
+    TimeRange.startTime = from.format("H:m");
+    TimeRange.endDate = until;
+    TimeRange.endTime = until.format("H:m");
+    TimeRange.type = 'absolute';
+
+    state.timeConfig = TimeRange;
+
+    state.defaultGraphParams.from = from.format('H:i_Ymd');
+    state.defaultGraphParams.until = until.format('H:i_Ymd');
+  }
+
   updateTimeText();
 
 

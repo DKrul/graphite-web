@@ -1,4 +1,4 @@
-from django.test import TestCase
+from .base import TestCase
 
 from graphite.render.datalib import TimeSeries, nonempty
 
@@ -46,7 +46,7 @@ class TimeSeriesTest(TestCase):
     def test_TimeSeries_getInfo(self):
       values = range(0,100)
       series = TimeSeries("collectd.test-db.load.value", 0, len(values), 1, values)
-      self.assertEqual(series.getInfo(), {'name': 'collectd.test-db.load.value', 'values': values, 'start': 0, 'step': 1, 'end': len(values)} )
+      self.assertEqual(series.getInfo(), {'name': 'collectd.test-db.load.value', 'values': values, 'start': 0, 'step': 1, 'end': len(values), 'pathExpression': 'collectd.test-db.load.value'} )
 
     def test_TimeSeries_consolidate(self):
       values = range(0,100)
@@ -104,6 +104,24 @@ class TimeSeriesTest(TestCase):
       series.consolidate(2)
       self.assertEqual(series.valuesPerPoint, 2)
       expected = TimeSeries("collectd.test-db.load.value", 0, 5, 1, range(0,100,2)+[None])
+      self.assertEqual(list(series), list(expected))
+
+    def test_TimeSeries_iterate_valuesPerPoint_2_first(self):
+      values = range(0,100)
+      series = TimeSeries("collectd.test-db.load.value", 0, 5, 1, values, consolidate='first')
+      self.assertEqual(series.valuesPerPoint, 1)
+      series.consolidate(2)
+      self.assertEqual(series.valuesPerPoint, 2)
+      expected = TimeSeries("collectd.test-db.load.value", 0, 5, 1, range(0,100,2)+[None])
+      self.assertEqual(list(series), list(expected))
+
+    def test_TimeSeries_iterate_valuesPerPoint_2_last(self):
+      values = range(0,100)
+      series = TimeSeries("collectd.test-db.load.value", 0, 5, 1, values, consolidate='last')
+      self.assertEqual(series.valuesPerPoint, 1)
+      series.consolidate(2)
+      self.assertEqual(series.valuesPerPoint, 2)
+      expected = TimeSeries("collectd.test-db.load.value", 0, 5, 1, range(1,100,2)+[None])
       self.assertEqual(list(series), list(expected))
 
     def test_TimeSeries_iterate_valuesPerPoint_2_invalid(self):

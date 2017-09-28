@@ -60,6 +60,9 @@ Collection
 `Sensu`_
   A monitoring framework that can route metrics to Graphite. Servers subscribe to sets of checks, so getting metrics from a new server to Graphite is as simple as installing the Sensu client and subscribing.
 
+`snort2graphite`_
+  Snort IDS/IPS can be configured to generate a rich set of metrics about network traffic. Presently there are more than 130 metrics available. Snort2graphite will pick up the most recent data from your snort.stats file and send all the metrics into Graphite. 
+
 `SqlToGraphite`_
   An agent for windows written in .net to collect metrics using plugins (WMI, SQL Server, Oracle) by polling an endpoint with a SQL query and pushing the results into graphite. It uses either a local or a centralised configuration over HTTP.
 
@@ -154,9 +157,6 @@ Visualization
   - synchronize dashboards between multiple Graphite servers
   - keep dashboards in YAML format
 
-`Graphite-Observer`_
-  A real-time monitor dashboard for Graphite.
-
 `Graphite-Tattle`_
   A self-service dashboard frontend for Graphite and `Ganglia`_.
 
@@ -189,6 +189,9 @@ Visualization
 
 `Pencil`_
   A monitoring frontend for graphite. It runs a webserver that dishes out pretty Graphite URLs in interesting and intuitive layouts.
+  
+`Targets-io`_
+  A dashboard application for organizing, analyzing, benchmarking and reporting of performance test results. All performance test metrics are stored in Graphite and can be benchmarked between test runs, providing automated feedback on the performance of an application.
 
 `Tasseo`_
   A lightweight, easily configurable, real-time dashboard for Graphite metrics.
@@ -238,6 +241,9 @@ Storage Backend Alternates
 --------------------------
 If you wish to use a backend to graphite other than Whisper, there are some options available to you.
 
+`BigGraphite`_
+  A time-series database written in Python on top of Cassandra.
+
 `Ceres`_
   An alternate storage backend provided by the Graphite Project.  It it intended to be a distributable time-series database.  It is currently in a pre-release status.
 
@@ -279,6 +285,7 @@ Other
 
 .. _Backbone.js: http://documentcloud.github.com/backbone
 .. _Backstop: https://github.com/obfuscurity/backstop
+.. _BigGraphite: https://github.com/criteo/biggraphite
 .. _bosun: http://bosun.org
 .. _Brubeck: https://github.com/github/brubeck
 .. _Bryans-Graphite-Tools: https://github.com/linkslice/graphite-tools
@@ -314,7 +321,6 @@ Other
 .. _graphite-beacon: https://github.com/klen/graphite-beacon
 .. _graphite-dashboardcli: https://github.com/blacked/graphite-dashboardcli
 .. _Graphite-Newrelic: https://github.com/gingerlime/graphite-newrelic
-.. _Graphite-Observer: https://github.com/huoxy/graphite-observer
 .. _Graphite-relay: https://github.com/markchadwick/graphite-relay
 .. _Graphite-Tattle: https://github.com/wayfair/Graphite-Tattle
 .. _graphite-to-zabbix: https://github.com/blacked/graphite-to-zabbix
@@ -355,10 +361,12 @@ Other
 .. _Sensu: http://sensuapp.org
 .. _Seyren: https://github.com/scobal/seyren
 .. _Shinken: http://www.shinken-monitoring.org
+.. _snort2graphite: https://github.com/gregvolk/snort2graphite
 .. _SqlToGraphite: https://github.com/perryofpeek/SqlToGraphite
 .. _SSC Serv: https://ssc-serv.com
 .. _statsd: https://github.com/etsy/statsd
 .. _Tasseo: https://github.com/obfuscurity/tasseo
+.. _Targets-io: https://github.com/dmoll1974/targets-io
 .. _Terphite: https://github.com/benwtr/terphite
 .. _Tessera: https://github.com/urbanairship/tessera
 .. _Therry: https://github.com/obfuscurity/therry

@@ -95,8 +95,8 @@ except ImportError:
   required += 1
 
 
-if django and django.VERSION[:2] < (1,4):
-  sys.stderr.write("[REQUIRED] You have django version %s installed, but version 1.4 or greater is required\n" % django.get_version())
+if django and django.VERSION[:2] < (1,8):
+  sys.stderr.write("[REQUIRED] You have django version %s installed, but version 1.8 or greater is required\n" % django.get_version())
   required += 1
 
 
@@ -148,6 +148,14 @@ try:
     import whitenoise
 except ImportError:
     sys.stderr.write("[OPTIONAL] Unable to import the 'whitenoise' module. This is useful for serving static files.\n")
+    optional += 1
+
+
+# Test for pyhash
+try:
+    import pyhash
+except ImportError:
+    sys.stderr.write("[OPTIONAL] Unable to import the 'pyhash' module. This is useful for fnv1_ch hashing support.\n")
     optional += 1
 
 

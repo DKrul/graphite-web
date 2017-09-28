@@ -1,23 +1,19 @@
 from pyparsing import (
-    ParserElement, Forward, Combine, Optional, Word, Literal, CaselessKeyword,
+    Forward, Combine, Optional, Word, Literal, CaselessKeyword,
     CaselessLiteral, Group, FollowedBy, LineEnd, OneOrMore, ZeroOrMore,
-    nums, alphas, alphanums, printables, delimitedList, quotedString,
+    alphas, alphanums, printables, delimitedList, quotedString, Regex,
     __version__,
 )
 
-ParserElement.enablePackrat()
 grammar = Forward()
 
 expression = Forward()
 
 # Literals
-intNumber = Combine(
-  Optional('-') + Word(nums)
-)('integer')
 
-floatNumber = Combine(
-  Optional('-') + Word(nums) + Literal('.') + Word(nums)
-)('float')
+intNumber = Regex(r'-?\d+')('integer')
+
+floatNumber = Regex(r'-?\d+\.\d+')('float')
 
 sciNumber = Combine(
   (floatNumber | intNumber) + CaselessLiteral('e') + intNumber
@@ -58,7 +54,7 @@ comma = Literal(',').suppress()
 equal = Literal('=').suppress()
 backslash = Literal('\\').suppress()
 
-symbols = '''(){},=.'"\\'''
+symbols = '''(){},.'"\\'''
 arg = Group(
   boolean |
   number |
@@ -81,7 +77,7 @@ call = Group(
 
 # Metric pattern (aka. pathExpression)
 validMetricChars = ''.join((set(printables) - set(symbols)))
-escapedChar = backslash + Word(symbols, exact=1)
+escapedChar = backslash + Word(symbols + '=', exact=1)
 partialPathElem = Combine(
   OneOrMore(
     escapedChar | Word(validMetricChars)
